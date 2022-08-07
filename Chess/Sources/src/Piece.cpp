@@ -218,3 +218,56 @@ void King::calculatePossibleMoves(const std::vector<Piece*> *context){
 void King::printPiece() const{
     std::cout << (color == Color::WHITE? "w" : "b") << "K";
 }
+
+Pawn::Pawn(int coord, Color color) : Piece(coord, color){}
+
+Pawn::Pawn(const Coordinates *coord, Color color) : Piece(coord, color){}
+
+Pawn::Pawn(const Pawn* pawn) : Piece(pawn->getCoord(), pawn->getColor()){}
+
+Pawn::~Pawn(){}
+
+void Pawn::calculatePossibleMoves(const std::vector<Piece*> *context){
+    int raw = getCoord()->getRaw();
+    int column = getCoord()->getColumn();
+
+    int columnTakesLeft = column - 1;
+    int columnTakesRight = column + 1;
+
+    if (color == Color::WHITE){
+        if (raw == 1){
+            possibleMoves.push_back(new Coordinates(raw + 2, column));
+        }
+        if (raw + 1 < 8){
+            possibleMoves.push_back(new Coordinates(raw + 1, column));
+
+            if (columnTakesLeft >= 0 && (*context)[(raw + 1) * 8 + columnTakesLeft] != 0 && (*context)[(raw + 1) * 8 + columnTakesLeft]->getColor() == Color::BLACK){
+                possibleMoves.push_back(new Coordinates(raw + 1, columnTakesLeft));
+            }
+
+            if (columnTakesRight < 8 && (*context)[(raw + 1) * 8 + columnTakesRight] != 0 && (*context)[(raw + 1) * 8 + columnTakesRight]->getColor() == Color::BLACK){
+                possibleMoves.push_back(new Coordinates(raw + 1, columnTakesRight));
+            }
+        }
+    }
+    else{
+        if (raw == 6){
+            possibleMoves.push_back(new Coordinates(raw - 2, column));
+        }
+        if (raw - 1 >= 0){
+            possibleMoves.push_back(new Coordinates(raw - 1, column));
+
+            if (columnTakesLeft >= 0 && (*context)[(raw - 1) * 8 + columnTakesLeft] != 0 && (*context)[(raw - 1) * 8 + columnTakesLeft]->getColor() == Color::WHITE){
+                possibleMoves.push_back(new Coordinates(raw - 1, columnTakesLeft));
+            }
+            
+            if (columnTakesRight < 8 && (*context)[(raw - 1) * 8 + columnTakesRight] != 0 && (*context)[(raw - 1) * 8 + columnTakesRight]->getColor() == Color::WHITE){
+                possibleMoves.push_back(new Coordinates(raw - 1, columnTakesRight));
+            }
+        }
+    }
+}
+
+void Pawn::printPiece() const{
+    std::cout << (color == Color::WHITE? "w" : "b") << "P";
+}

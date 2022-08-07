@@ -17,6 +17,8 @@ class Board{
     Piece* getBoardPos(const unsigned long int k) const;
     void printBoard() const;
 
+    void addPiece(const Piece* p);
+
     private:
     std::vector<Piece*> position;
     std::vector<Board*> nextPositions;

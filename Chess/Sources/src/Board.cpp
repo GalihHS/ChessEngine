@@ -40,6 +40,9 @@ Board::Board(const Board* b){
             else if(typeid(*p) == typeid(King)){
                 position.push_back(new King((King*)p));
             }
+            else if(typeid(*p) == typeid(Pawn)){
+                position.push_back(new Pawn((Pawn*)p));
+            }
         }
     }
 
@@ -67,6 +70,9 @@ Board::Board(Piece* p){
     }
     else if(typeid(*p) == typeid(King)){
         position[coord] = new King((King*)p);
+    }
+    else if(typeid(*p) == typeid(Pawn)){
+        position[coord] = new Pawn((Pawn*)p);
     }
 }
 
@@ -96,6 +102,28 @@ Board* Board::getPosition(const unsigned long int k) const{
 
 void Board::addPosition(const Board* b){
     nextPositions.push_back(new Board(b));
+}
+
+void Board::addPiece(const Piece* p){
+    unsigned short int coord = p->getCoord()->getMergedCoord();
+    if(typeid(*p) == typeid(Knight)){
+        position[coord] = new Knight((Knight*)p);
+    }
+    else if(typeid(*p) == typeid(Bishop)){
+        position[coord] = new Bishop((Bishop*)p);
+    }
+    else if(typeid(*p) == typeid(Rook)){
+        position[coord] = new Rook((Rook*)p);
+    }
+    else if(typeid(*p) == typeid(Queen)){
+        position[coord] = new Queen((Queen*)p);
+    }
+    else if(typeid(*p) == typeid(King)){
+        position[coord] = new King((King*)p);
+    }
+    else if(typeid(*p) == typeid(Pawn)){
+        position[coord] = new Pawn((Pawn*)p);
+    }
 }
 
 Piece* Board::getBoardPos(const unsigned long int k) const{

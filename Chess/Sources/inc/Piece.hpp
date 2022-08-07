@@ -90,4 +90,16 @@ class King : public Piece{
     void printPiece() const;
 };
 
+class Pawn : public Piece{
+    public:
+    Pawn(int coord, Color color);
+    Pawn(const Coordinates *coord, Color color);
+    Pawn(const Pawn* pawn);
+    virtual ~Pawn();
+
+    void calculatePossibleMoves(const std::vector<Piece*> *context);
+
+    void printPiece() const;
+};
+
 #endif

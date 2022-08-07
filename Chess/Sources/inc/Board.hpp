@@ -14,10 +14,10 @@ class Board{
     Board* getPosition(const unsigned long int k) const;
     void addPosition(const Board* b);
 
+    void addPiece(const Piece* p);
+
     Piece* getBoardPos(const unsigned long int k) const;
     void printBoard() const;
-
-    void addPiece(const Piece* p);
 
     private:
     std::vector<Piece*> position;

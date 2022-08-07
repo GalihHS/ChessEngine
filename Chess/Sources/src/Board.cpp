@@ -3,28 +3,19 @@
 Board::Board(){
     nextPositions = std::vector<Board*>(0);
     position = std::vector<Piece*>(64, 0);
-    for(unsigned long int k = 0; k < 8; k++){
+    /*for(unsigned long int k = 0; k < 8; k++){
         position[8 + k] = new Pawn(8 + k, Color::WHITE);
         position[48 + k] = new Pawn(48 + k, Color::BLACK);
-    }
+    }*/
 
-    position[0] = new Rook(0, Color::WHITE);
-    position[7] = new Rook(7, Color::WHITE);
+   
     position[1] = new Knight(1, Color::WHITE);
     position[6] = new Knight(6, Color::WHITE);
-    position[2] = new Bishop(2, Color::WHITE);
-    position[5] = new Bishop(5, Color::WHITE);
-    position[3] = new Queen(3, Color::WHITE);
-    position[4] = new King(4, Color::WHITE);
+    
 
-    position[56] = new Rook(0, Color::BLACK);
-    position[63] = new Rook(7, Color::BLACK);
     position[57] = new Knight(57, Color::BLACK);
     position[62] = new Knight(62, Color::BLACK);
-    position[58] = new Bishop(58, Color::BLACK);
-    position[61] = new Bishop(61, Color::BLACK);
-    position[59] = new Queen(59, Color::BLACK);
-    position[60] = new King(60, Color::BLACK);
+    
 }
 
 Board::Board(const Board* b){
@@ -34,23 +25,14 @@ Board::Board(const Board* b){
             position.push_back(0);
         }
         else{
-            if(typeid(*p) == typeid(King)){
-                position.push_back(new King((King*)p));
-            }
-            else if(typeid(*p) == typeid(Queen)){
-                position.push_back(new Queen((Queen*)p));
-            }
-            else if(typeid(*p) == typeid(Rook)){
-                position.push_back(new Rook((Rook*)p));
+            if(typeid(*p) == typeid(Knight)){
+                position.push_back(new Knight((Knight*)p));
             }
             else if(typeid(*p) == typeid(Bishop)){
                 position.push_back(new Bishop((Bishop*)p));
             }
-            else if(typeid(*p) == typeid(Knight)){
-                position.push_back(new Knight((Knight*)p));
-            }
-            else if(typeid(*p) == typeid(Pawn)){
-                position.push_back(new Pawn((Pawn*)p));
+            else if(typeid(*p) == typeid(Rook)){
+                position.push_back(new Bishop((Bishop*)p));
             }
         }
     }
@@ -65,23 +47,14 @@ Board::Board(Piece* p){
     unsigned short int coord = p->getCoord()->getMergedCoord();
     nextPositions = std::vector<Board*>(0);
     position = std::vector<Piece*>(64, 0);
-    if(typeid(*p) == typeid(King)){
-        position[coord] = new King((King*)p);
-    }
-    else if(typeid(*p) == typeid(Queen)){
-        position[coord] = new Queen((Queen*)p);
-    }
-    else if(typeid(*p) == typeid(Rook)){
-        position[coord] = new Rook((Rook*)p);
+    if(typeid(*p) == typeid(Knight)){
+        position[coord] = new Knight((Knight*)p);
     }
     else if(typeid(*p) == typeid(Bishop)){
         position[coord] = new Bishop((Bishop*)p);
     }
-    else if(typeid(*p) == typeid(Knight)){
-        position[coord] = new Knight((Knight*)p);
-    }
-    else if(typeid(*p) == typeid(Pawn)){
-        position[coord] = new Pawn((Pawn*)p);
+    else if(typeid(*p) == typeid(Rook)){
+        position[coord] = new Rook((Rook*)p);
     }
 }
 
@@ -97,7 +70,7 @@ Board::~Board(){
     }
 }
 
-std::vector<Piece*> *Board::getContext() const{
+const std::vector<Piece*> *Board::getContext() const{
     return &position;
 }
 

@@ -30,36 +30,12 @@ class Piece{
     std::vector<Coordinates*> possibleMoves;
 };
 
-class King : public Piece{
+class Knight : public Piece{
     public:
-    King(int coord, Color color);
-    King(const Coordinates *coord, Color color);
-    King(const King* king);
-    virtual ~King();
-
-    void calculatePossibleMoves(const std::vector<Piece*> *context);
-
-    void printPiece() const;
-};
-
-class Queen : public Piece{
-    public:
-    Queen(int coord, Color color);
-    Queen(const Coordinates *coord, Color color);
-    Queen(const Queen* queen);
-    virtual ~Queen();
-
-    void calculatePossibleMoves(const std::vector<Piece*> *context);
-
-    void printPiece() const;
-};
-
-class Rook : public Piece{
-    public:
-    Rook(int coord, Color color);
-    Rook(const Coordinates *coord, Color color);
-    Rook(const Rook* rook);
-    virtual ~Rook();
+    Knight(int coord, Color color);
+    Knight(const Coordinates *coord, Color color);
+    Knight(const Knight* knight);
+    virtual ~Knight();
 
     void calculatePossibleMoves(const std::vector<Piece*> *context);
 
@@ -78,24 +54,12 @@ class Bishop : public Piece{
     void printPiece() const;
 };
 
-class Knight : public Piece{
+class Rook : public Piece{
     public:
-    Knight(int coord, Color color);
-    Knight(const Coordinates *coord, Color color);
-    Knight(const Knight* knight);
-    virtual ~Knight();
-
-    void calculatePossibleMoves(const std::vector<Piece*> *context);
-
-    void printPiece() const;
-};
-
-class Pawn : public Piece{
-    public:
-    Pawn(int coord, Color color);
-    Pawn(const Coordinates *coord, Color color);
-    Pawn(const Pawn* pawn);
-    virtual ~Pawn();
+    Rook(int coord, Color color);
+    Rook(const Coordinates *coord, Color color);
+    Rook(const Rook* rook);
+    virtual ~Rook();
 
     void calculatePossibleMoves(const std::vector<Piece*> *context);
 

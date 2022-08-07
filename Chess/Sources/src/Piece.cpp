@@ -39,6 +39,10 @@ Coordinates *Piece::getPossibleMove(const unsigned long int k) const{
     return possibleMoves[k];
 }
 
+bool Piece::canGoOnSquare(int raw, int column, const std::vector<Piece*> *context) const{
+    return ((*context)[raw * 8 + column] == 0 || (*context)[raw * 8 + column]->getColor() != color);
+}
+
 Knight::Knight(int coord, Color color) : Piece(coord, color){}
 
 Knight::Knight(const Coordinates *coord, Color color) : Piece(coord, color){}
@@ -58,7 +62,7 @@ void Knight::calculatePossibleMoves(const std::vector<Piece*> *context){
         if (newRaw >= 0 && newRaw < 8){
             for (int j = 0; j < 2; j++){
                 newColumn = column + pow(-1, j);
-                if (newColumn >= 0 && newColumn < 8){
+                if (newColumn >= 0 && newColumn < 8 && canGoOnSquare(newRaw, newColumn, context)){
                     possibleMoves.push_back(new Coordinates(newRaw, newColumn));
                 }
             }
@@ -67,7 +71,7 @@ void Knight::calculatePossibleMoves(const std::vector<Piece*> *context){
         if (newColumn >= 0 && newColumn < 8){
             for (int j = 0; j < 2; j++){
                 newRaw = raw + pow(-1, j);
-                if (newRaw >= 0 && newRaw < 8){
+                if (newRaw >= 0 && newRaw < 8 && canGoOnSquare(newRaw, newColumn, context)){
                     possibleMoves.push_back(new Coordinates(newRaw, newColumn));
                 }
             }
@@ -97,7 +101,7 @@ void Bishop::calculatePossibleMoves(const std::vector<Piece*> *context){
         for (int j = 0; j < 2; j++){
             newRaw = raw + pow(-1, i);
             newColumn = column + pow(-1, j);
-            while (newRaw >= 0 && newRaw < 8 && newColumn >= 0 && newColumn < 8){
+            while (newRaw >= 0 && newRaw < 8 && newColumn >= 0 && newColumn < 8 && canGoOnSquare(newRaw, newColumn, context)){
                 possibleMoves.push_back(new Coordinates(newRaw, newColumn));
                 newRaw = newRaw + pow(-1, i);
                 newColumn = newColumn + pow(-1, j);
@@ -128,12 +132,12 @@ void Rook::calculatePossibleMoves(const std::vector<Piece*> *context){
         newRaw = raw + pow(-1, i);
         newColumn = column + pow(-1, i);
 
-        while (newRaw >= 0 && newRaw < 8){
+        while (newRaw >= 0 && newRaw < 8  && canGoOnSquare(newRaw, column, context)){
             possibleMoves.push_back(new Coordinates(newRaw, column));
             newRaw = newRaw + pow(-1, i);
         }
 
-        while (newColumn >= 0 && newColumn < 8){
+        while (newColumn >= 0 && newColumn < 8 && canGoOnSquare(raw, newColumn, context)){
             possibleMoves.push_back(new Coordinates(raw, newColumn));
             newColumn = newColumn + pow(-1, i);
         }
@@ -165,12 +169,12 @@ void Queen::calculatePossibleMoves(const std::vector<Piece*> *context){
         newRaw = raw + pow(-1, i);
         newColumn = column + pow(-1, i);
 
-        while (newRaw >= 0 && newRaw < 8){
+        while (newRaw >= 0 && newRaw < 8 && canGoOnSquare(newRaw, column, context)){
             possibleMoves.push_back(new Coordinates(newRaw, column));
             newRaw = newRaw + pow(-1, i);
         }
 
-        while (newColumn >= 0 && newColumn < 8){
+        while (newColumn >= 0 && newColumn < 8 && canGoOnSquare(raw, newColumn, context)){
             possibleMoves.push_back(new Coordinates(raw, newColumn));
             newColumn = newColumn + pow(-1, i);
         }
@@ -181,7 +185,7 @@ void Queen::calculatePossibleMoves(const std::vector<Piece*> *context){
         for (int j = 0; j < 2; j++){
             newRaw = raw + pow(-1, i);
             newColumn = column + pow(-1, j);
-            while (newRaw >= 0 && newRaw < 8 && newColumn >= 0 && newColumn < 8){
+            while (newRaw >= 0 && newRaw < 8 && newColumn >= 0 && newColumn < 8 && canGoOnSquare(newRaw, newColumn, context)){
                 possibleMoves.push_back(new Coordinates(newRaw, newColumn));
                 newRaw = newRaw + pow(-1, i);
                 newColumn = newColumn + pow(-1, j);
@@ -208,7 +212,7 @@ void King::calculatePossibleMoves(const std::vector<Piece*> *context){
 
     for (int i = raw - 1; i < raw + 2; i++){
         for (int j = column - 1; j < column + 2; j++){
-            if((i != column || j != raw) && i >= 0 && i < 8 && j >= 0 && j < 8){
+            if((i != column || j != raw) && i >= 0 && i < 8 && j >= 0 && j < 8  && canGoOnSquare(i, j, context)){
                 possibleMoves.push_back(new Coordinates(i, j));
             }
         }
@@ -235,11 +239,13 @@ void Pawn::calculatePossibleMoves(const std::vector<Piece*> *context){
     int columnTakesRight = column + 1;
 
     if (color == Color::WHITE){
-        if (raw == 1){
+        if (raw == 1 && (*context)[(raw + 1) * 8 + column] == 0 && (*context)[(raw + 2) * 8 + column] == 0){
             possibleMoves.push_back(new Coordinates(raw + 2, column));
         }
         if (raw + 1 < 8){
-            possibleMoves.push_back(new Coordinates(raw + 1, column));
+            if ((*context)[(raw + 1) * 8 + column] == 0){
+                possibleMoves.push_back(new Coordinates(raw + 1, column));
+            }
 
             if (columnTakesLeft >= 0 && (*context)[(raw + 1) * 8 + columnTakesLeft] != 0 && (*context)[(raw + 1) * 8 + columnTakesLeft]->getColor() == Color::BLACK){
                 possibleMoves.push_back(new Coordinates(raw + 1, columnTakesLeft));
@@ -251,11 +257,13 @@ void Pawn::calculatePossibleMoves(const std::vector<Piece*> *context){
         }
     }
     else{
-        if (raw == 6){
+        if (raw == 6 && (*context)[(raw - 1) * 8 + column] == 0 && (*context)[(raw - 2) * 8 + column] == 0){
             possibleMoves.push_back(new Coordinates(raw - 2, column));
         }
         if (raw - 1 >= 0){
-            possibleMoves.push_back(new Coordinates(raw - 1, column));
+            if ((*context)[(raw - 1) * 8 + column] == 0){
+                possibleMoves.push_back(new Coordinates(raw - 1, column));
+            }
 
             if (columnTakesLeft >= 0 && (*context)[(raw - 1) * 8 + columnTakesLeft] != 0 && (*context)[(raw - 1) * 8 + columnTakesLeft]->getColor() == Color::WHITE){
                 possibleMoves.push_back(new Coordinates(raw - 1, columnTakesLeft));

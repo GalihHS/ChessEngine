@@ -17,8 +17,8 @@ Board::Board(){
     position[3] = new Queen(3, Color::WHITE);
     position[4] = new King(4, Color::WHITE);
     
-    position[56] = new Rook(0, Color::BLACK);
-    position[63] = new Rook(7, Color::BLACK);
+    position[56] = new Rook(56, Color::BLACK);
+    position[63] = new Rook(63, Color::BLACK);
     position[57] = new Knight(57, Color::BLACK);
     position[62] = new Knight(62, Color::BLACK);
     position[58] = new Bishop(58, Color::BLACK);

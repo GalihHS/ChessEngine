@@ -25,6 +25,8 @@ class Piece{
     virtual void printPiece() const =0;
     
     protected:
+    bool canGoOnSquare(int raw, int column, const std::vector<Piece*> *context) const;
+
     Color color;
     Coordinates* currentPosition;
     std::vector<Coordinates*> possibleMoves;

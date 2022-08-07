@@ -66,4 +66,16 @@ class Rook : public Piece{
     void printPiece() const;
 };
 
+class Queen : public Piece{
+    public:
+    Queen(int coord, Color color);
+    Queen(const Coordinates *coord, Color color);
+    Queen(const Queen* queen);
+    virtual ~Queen();
+
+    void calculatePossibleMoves(const std::vector<Piece*> *context);
+
+    void printPiece() const;
+};
+
 #endif

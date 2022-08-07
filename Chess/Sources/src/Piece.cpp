@@ -104,8 +104,6 @@ void Bishop::calculatePossibleMoves(const std::vector<Piece*> *context){
             }
         }
     }
-    
-
 }
 
 void Bishop::printPiece() const{
@@ -146,4 +144,52 @@ void Rook::calculatePossibleMoves(const std::vector<Piece*> *context){
 
 void Rook::printPiece() const{
     std::cout << (color == Color::WHITE? "w" : "b") << "R";
+}
+
+Queen::Queen(int coord, Color color) : Piece(coord, color){}
+
+Queen::Queen(const Coordinates *coord, Color color) : Piece(coord, color){}
+
+Queen::Queen(const Queen* queen) : Piece(queen->getCoord(), queen->getColor()){}
+
+Queen::~Queen(){}
+
+void Queen::calculatePossibleMoves(const std::vector<Piece*> *context){
+    int raw = getCoord()->getRaw();
+    int column = getCoord()->getColumn();
+    int newRaw = 0;
+    int newColumn = 0;
+
+    /* Rook moves */
+    for (int i = 0; i < 2; i++){
+        newRaw = raw + pow(-1, i);
+        newColumn = column + pow(-1, i);
+
+        while (newRaw >= 0 && newRaw < 8){
+            possibleMoves.push_back(new Coordinates(newRaw, column));
+            newRaw = newRaw + pow(-1, i);
+        }
+
+        while (newColumn >= 0 && newColumn < 8){
+            possibleMoves.push_back(new Coordinates(raw, newColumn));
+            newColumn = newColumn + pow(-1, i);
+        }
+    }
+
+    /* Bishop Moves */
+    for (int i = 0; i < 2; i++){
+        for (int j = 0; j < 2; j++){
+            newRaw = raw + pow(-1, i);
+            newColumn = column + pow(-1, j);
+            while (newRaw >= 0 && newRaw < 8 && newColumn >= 0 && newColumn < 8){
+                possibleMoves.push_back(new Coordinates(newRaw, newColumn));
+                newRaw = newRaw + pow(-1, i);
+                newColumn = newColumn + pow(-1, j);
+            }
+        }
+    }
+}
+
+void Queen::printPiece() const{
+    std::cout << (color == Color::WHITE? "w" : "b") << "Q";
 }

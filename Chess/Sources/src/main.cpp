@@ -2,7 +2,7 @@
 
 int main(){
     int square = 28;
-    Rook *knight = new Rook(square, Color::WHITE);
+    Queen *knight = new Queen(square, Color::WHITE);
     Board *b = new Board(knight);
     b->printBoard();
     b->getBoardPos(square)->calculatePossibleMoves(b->getContext());

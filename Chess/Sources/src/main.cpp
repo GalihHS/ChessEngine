@@ -1,8 +1,8 @@
 #include "../inc/Board.hpp"
 
 int main(){
-    int square = 28;
-    Queen *knight = new Queen(square, Color::WHITE);
+    int square = 0;
+    King *knight = new King(square, Color::WHITE);
     Board *b = new Board(knight);
     b->printBoard();
     b->getBoardPos(square)->calculatePossibleMoves(b->getContext());

@@ -78,4 +78,16 @@ class Queen : public Piece{
     void printPiece() const;
 };
 
+class King : public Piece{
+    public:
+    King(int coord, Color color);
+    King(const Coordinates *coord, Color color);
+    King(const King* king);
+    virtual ~King();
+
+    void calculatePossibleMoves(const std::vector<Piece*> *context);
+
+    void printPiece() const;
+};
+
 #endif

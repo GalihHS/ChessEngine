@@ -193,3 +193,28 @@ void Queen::calculatePossibleMoves(const std::vector<Piece*> *context){
 void Queen::printPiece() const{
     std::cout << (color == Color::WHITE? "w" : "b") << "Q";
 }
+
+King::King(int coord, Color color) : Piece(coord, color){}
+
+King::King(const Coordinates *coord, Color color) : Piece(coord, color){}
+
+King::King(const King* king) : Piece(king->getCoord(), king->getColor()){}
+
+King::~King(){}
+
+void King::calculatePossibleMoves(const std::vector<Piece*> *context){
+    int raw = getCoord()->getRaw();
+    int column = getCoord()->getColumn();
+
+    for (int i = raw - 1; i < raw + 2; i++){
+        for (int j = column - 1; j < column + 2; j++){
+            if((i != column || j != raw) && i >= 0 && i < 8 && j >= 0 && j < 8){
+                possibleMoves.push_back(new Coordinates(i, j));
+            }
+        }
+    }
+}
+
+void King::printPiece() const{
+    std::cout << (color == Color::WHITE? "w" : "b") << "K";
+}

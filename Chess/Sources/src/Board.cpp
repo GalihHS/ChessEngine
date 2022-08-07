@@ -37,6 +37,9 @@ Board::Board(const Board* b){
             else if(typeid(*p) == typeid(Queen)){
                 position.push_back(new Queen((Queen*)p));
             }
+            else if(typeid(*p) == typeid(King)){
+                position.push_back(new King((King*)p));
+            }
         }
     }
 
@@ -61,6 +64,9 @@ Board::Board(Piece* p){
     }
     else if(typeid(*p) == typeid(Queen)){
         position[coord] = new Queen((Queen*)p);
+    }
+    else if(typeid(*p) == typeid(King)){
+        position[coord] = new King((King*)p);
     }
 }
 

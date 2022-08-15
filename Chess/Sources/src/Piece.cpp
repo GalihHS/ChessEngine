@@ -293,6 +293,23 @@ void King::calculatePossibleMoves(const std::vector<Piece*> *context){
             }
         }
     }
+
+    if (!moved){
+        Piece *t1 = (*context)[raw * 8 + column + 3];
+        if(t1 != 0 && typeid(*t1) == typeid(Rook) 
+            && t1->getColor() == getColor() && !((Rook*)t1)->getMoved()
+            && (*context)[raw * 8 + column + 1] == 0 && (*context)[raw * 8 + column + 2] == 0){
+                possibleMoves.push_back(new Coordinates(raw, column + 2));
+        }
+
+        Piece *t2 = (*context)[raw * 8 + column - 4];
+        if(t2 != 0 && typeid(*t2) == typeid(Rook) 
+            && t2->getColor() == getColor() && !((Rook*)t2)->getMoved()
+            && (*context)[raw * 8 + column - 1] == 0 && (*context)[raw * 8 + column - 2] == 0
+            && (*context)[raw * 8 + column - 3] == 0){
+                possibleMoves.push_back(new Coordinates(raw, column - 2));
+        }
+    }
 }
 
 void King::printPiece() const{

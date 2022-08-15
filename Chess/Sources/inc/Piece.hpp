@@ -102,6 +102,13 @@ class Pawn : public Piece{
     void calculatePossibleMoves(const std::vector<Piece*> *context);
 
     void printPiece() const;
+
+    bool canBeTaken() const;
+    void setCanBeTaken(bool passant);
+
+    private:
+    bool canBeTakenEnPassant;
+
 };
 
 #endif

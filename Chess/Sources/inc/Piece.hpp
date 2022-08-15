@@ -65,7 +65,13 @@ class Rook : public Piece{
 
     void calculatePossibleMoves(const std::vector<Piece*> *context);
 
+    bool getMoved() const;
+    void setMoved();
+
     void printPiece() const;
+
+    private:
+    bool moved;
 };
 
 class Queen : public Piece{
@@ -90,6 +96,12 @@ class King : public Piece{
     void calculatePossibleMoves(const std::vector<Piece*> *context);
 
     void printPiece() const;
+
+    bool getMoved() const;
+    void setMoved();
+
+    private:
+    bool moved;
 };
 
 class Pawn : public Piece{

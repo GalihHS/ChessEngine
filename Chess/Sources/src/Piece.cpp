@@ -134,11 +134,17 @@ void Bishop::printPiece() const{
     std::cout << (color == Color::WHITE? "w" : "b") << "B";
 }
 
-Rook::Rook(int coord, Color color) : Piece(coord, color){}
+Rook::Rook(int coord, Color color) : Piece(coord, color){
+    moved = false;
+}
 
-Rook::Rook(const Coordinates *coord, Color color) : Piece(coord, color){}
+Rook::Rook(const Coordinates *coord, Color color) : Piece(coord, color){
+    moved = false;
+}
 
-Rook::Rook(const Rook* rook) : Piece(rook->getCoord(), rook->getColor()){}
+Rook::Rook(const Rook* rook) : Piece(rook->getCoord(), rook->getColor()){
+    moved = rook->getMoved();
+}
 
 Rook::~Rook(){}
 
@@ -172,6 +178,14 @@ void Rook::calculatePossibleMoves(const std::vector<Piece*> *context){
             }
         }
     }
+}
+
+bool Rook::getMoved() const{
+    return moved;
+}
+
+void Rook::setMoved(){
+    moved = true;
 }
 
 void Rook::printPiece() const{
@@ -243,13 +257,27 @@ void Queen::printPiece() const{
     std::cout << (color == Color::WHITE? "w" : "b") << "Q";
 }
 
-King::King(int coord, Color color) : Piece(coord, color){}
+King::King(int coord, Color color) : Piece(coord, color){
+    moved = false;
+}
 
-King::King(const Coordinates *coord, Color color) : Piece(coord, color){}
+King::King(const Coordinates *coord, Color color) : Piece(coord, color){
+    moved = false;
+}
 
-King::King(const King* king) : Piece(king->getCoord(), king->getColor()){}
+King::King(const King* king) : Piece(king->getCoord(), king->getColor()){
+    moved = king->getMoved();
+}
 
 King::~King(){}
+
+bool King::getMoved() const{
+    return moved;
+}
+
+void King::setMoved(){
+    moved = true;
+}
 
 void King::calculatePossibleMoves(const std::vector<Piece*> *context){
     int raw = getCoord()->getRaw();
@@ -322,7 +350,7 @@ void Pawn::calculatePossibleMoves(const std::vector<Piece*> *context){
                 && ((Pawn*)(*context)[raw * 8 + columnTakesLeft])->canBeTaken()){
                     possibleMoves.push_back(new Coordinates(raw + 1, columnTakesLeft));
             }
-            
+
             if (columnTakesRight >= 0 && (*context)[raw * 8 + columnTakesRight] != 0 && (*context)[raw * 8 + columnTakesRight]->getColor() == Color::BLACK 
                 && (*context)[raw * 8 + columnTakesRight] != 0 && typeid(*(*context)[raw * 8 + columnTakesRight]) == typeid(Pawn) 
                 && ((Pawn*)(*context)[raw * 8 + columnTakesRight])->canBeTaken()){

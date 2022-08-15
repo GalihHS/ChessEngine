@@ -271,11 +271,25 @@ void King::printPiece() const{
     std::cout << (color == Color::WHITE? "w" : "b") << "K";
 }
 
-Pawn::Pawn(int coord, Color color) : Piece(coord, color){}
+Pawn::Pawn(int coord, Color color) : Piece(coord, color){
+    canBeTakenEnPassant = false;
+}
 
-Pawn::Pawn(const Coordinates *coord, Color color) : Piece(coord, color){}
+Pawn::Pawn(const Coordinates *coord, Color color) : Piece(coord, color){
+    canBeTakenEnPassant = false;
+}
 
-Pawn::Pawn(const Pawn* pawn) : Piece(pawn->getCoord(), pawn->getColor()){}
+Pawn::Pawn(const Pawn* pawn) : Piece(pawn->getCoord(), pawn->getColor()){
+    canBeTakenEnPassant = pawn->canBeTaken();
+}
+
+bool Pawn::canBeTaken() const{
+    return canBeTakenEnPassant;
+}
+
+void Pawn::setCanBeTaken(bool passant){
+    canBeTakenEnPassant = passant;
+}
 
 Pawn::~Pawn(){}
 
@@ -302,6 +316,18 @@ void Pawn::calculatePossibleMoves(const std::vector<Piece*> *context){
             if (columnTakesRight < 8 && (*context)[(raw + 1) * 8 + columnTakesRight] != 0 && (*context)[(raw + 1) * 8 + columnTakesRight]->getColor() == Color::BLACK){
                 possibleMoves.push_back(new Coordinates(raw + 1, columnTakesRight));
             }
+
+            if (columnTakesLeft >= 0 && (*context)[raw * 8 + columnTakesLeft] != 0 && (*context)[raw * 8 + columnTakesLeft]->getColor() == Color::BLACK 
+                && (*context)[raw * 8 + columnTakesLeft] != 0 && typeid(*(*context)[raw * 8 + columnTakesLeft]) == typeid(Pawn) 
+                && ((Pawn*)(*context)[raw * 8 + columnTakesLeft])->canBeTaken()){
+                    possibleMoves.push_back(new Coordinates(raw + 1, columnTakesLeft));
+            }
+            
+            if (columnTakesRight >= 0 && (*context)[raw * 8 + columnTakesRight] != 0 && (*context)[raw * 8 + columnTakesRight]->getColor() == Color::BLACK 
+                && (*context)[raw * 8 + columnTakesRight] != 0 && typeid(*(*context)[raw * 8 + columnTakesRight]) == typeid(Pawn) 
+                && ((Pawn*)(*context)[raw * 8 + columnTakesRight])->canBeTaken()){
+                    possibleMoves.push_back(new Coordinates(raw + 1, columnTakesRight));
+            }
         }
     }
     else{
@@ -320,6 +346,16 @@ void Pawn::calculatePossibleMoves(const std::vector<Piece*> *context){
             if (columnTakesRight < 8 && (*context)[(raw - 1) * 8 + columnTakesRight] != 0 && (*context)[(raw - 1) * 8 + columnTakesRight]->getColor() == Color::WHITE){
                 possibleMoves.push_back(new Coordinates(raw - 1, columnTakesRight));
             }
+        }
+        if (columnTakesLeft >= 0 && (*context)[raw * 8 + columnTakesLeft] != 0 && (*context)[raw * 8 + columnTakesLeft]->getColor() == Color::WHITE 
+            && (*context)[raw * 8 + columnTakesLeft] != 0 && typeid(*(*context)[raw * 8 + columnTakesLeft]) == typeid(Pawn) 
+            && ((Pawn*)(*context)[raw * 8 + columnTakesLeft])->canBeTaken()){
+                possibleMoves.push_back(new Coordinates(raw - 1, columnTakesLeft));
+        }
+        if (columnTakesRight >= 0 && (*context)[raw * 8 + columnTakesRight] != 0 && (*context)[raw * 8 + columnTakesRight]->getColor() == Color::WHITE 
+            && (*context)[raw * 8 + columnTakesRight] != 0 && typeid(*(*context)[raw * 8 + columnTakesRight]) == typeid(Pawn) 
+            && ((Pawn*)(*context)[raw * 8 + columnTakesRight])->canBeTaken()){
+                possibleMoves.push_back(new Coordinates(raw - 1, columnTakesRight));
         }
     }
 }
